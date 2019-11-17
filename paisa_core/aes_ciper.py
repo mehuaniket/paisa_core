@@ -1,7 +1,9 @@
+import base64
+
 from Crypto.Cipher import AES
 from pbkdf2 import PBKDF2
-from .config import SALT
-import base64
+
+from paisa_core.config import SALT
 
 BS = 16
 pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)

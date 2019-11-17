@@ -29,10 +29,10 @@ class ExchangeSegment(Enum, metaclass=EnumDirectValueMeta):
 
 class OrderValidity(Enum, metaclass=EnumDirectValueMeta):
     DAY = 0
-    EOS = 4
-    GTC = 2
     GTD = 1
+    GTC = 2
     IOC = 3
+    EOS = 4
     FOK = 6
 
 

@@ -1,6 +1,8 @@
+import datetime
 import socket
-import requests
+
 import netifaces as nif
+import requests
 
 
 def build_head(settings):
@@ -14,8 +16,14 @@ def build_head(settings):
         "password": settings.PASSWORD
     }
 
-def get_current_date():
-    return None
+
+def get_current_date(days=None):
+    date_now = datetime.datetime.now()
+    if days:
+        date_now = date_now + datetime.timedelta(days=days)
+    milliseconds = int(date_now.timestamp() * 1000)
+
+    return "/Date({})/".format(milliseconds)
 
 
 def get_my_ip():
@@ -86,6 +94,7 @@ def build_get_margin_body(head, request_code, client_code):
 def build_placer_modify_order_body(head,
                                    request_code,
                                    client_code,
+                                   app_code,
                                    order_for,
                                    exchange,
                                    exchange_type,
@@ -96,9 +105,7 @@ def build_placer_modify_order_body(head,
                                    script_code,
                                    at_market,
                                    remote_order_id,
-                                   transaction_type,
                                    order_validity,
-                                   order_date_time=get_current_date(),
                                    valid_till_date=get_current_date(),
                                    exchange_id=0,
                                    disclosed_quantity=0,
@@ -106,7 +113,7 @@ def build_placer_modify_order_body(head,
                                    is_stoploss_order=False,
                                    is_ioc_order=False,
                                    is_intraday=True,
-                                   after_market=False,
+                                   after_market="N",
                                    traded_quantity=0,
                                    trigger_price=None,
                                    squareoff=None,
@@ -216,37 +223,37 @@ def build_placer_modify_order_body(head,
 
     """
     params = locals()
-    del (params["self"])
+    # print(params)
     head["requestCode"] = request_code
     body = {
         "head": head,
         "body": {
             "ClientCode": client_code,
-            "OrderFor": "P",
-            "Exchange": "N",
-            "ExchangeType": "C",
-            "Price": 717.65,
+            "OrderFor": order_for,
+            "Exchange": exchange,
+            "ExchangeType": exchange_type,
+            "Price": price,
             "OrderID": 0,
-            "OrderType": "BUY",
-            "Qty": 2,
-            "OrderDateTime": "/Date(1556104184000)/",
-            "ScripCode": 11809,
-            "AtMarket": False,
-            "RemoteOrderID": "57129776201804050344475",
+            "OrderType": order_type,
+            "Qty": quantity,
+            "OrderDateTime": get_current_date(),
+            "ScripCode": script_code,
+            "AtMarket": at_market,
+            "RemoteOrderID": remote_order_id,
             "ExchOrderID": 0,
             "DisQty": 0,
-            "IsStopLossOrder": False,
-            "StopLossPrice": 0,
+            "IsStopLossOrder": is_stoploss_order,
+            "StopLossPrice": stoploss,
             "IsVTD": False,
             "IOCOrder": False,
             "IsIntraday": False,
             "PublicIP": get_public_ip(),
-            "AHPlaced": "N",
-            "ValidTillDate": "/Date(1556104184000)/",
-            "iOrderValidity": 0,
+            "AHPlaced": after_market,
+            "ValidTillDate": get_current_date(days=2),
+            "iOrderValidity": order_validity,
             "TradedQty": 0,
-            "OrderRequesterCode": "1234567",
-            "AppSource": 56
+            "OrderRequesterCode": client_code,
+            "AppSource": app_code
 
         }
     }

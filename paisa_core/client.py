@@ -1,8 +1,12 @@
 import json
+
 import requests
-from .config import default_headers, BASE_CONFIG
-from .builder import build_head, build_login_body, build_get_margin_body, build_placer_modify_order_body
-from .aes_ciper import AESCipher
+
+from paisa_core import utils
+from paisa_core.aes_ciper import AESCipher
+from paisa_core.builder import build_head, build_login_body, build_get_margin_body, build_placer_modify_order_body
+from paisa_core.config import default_headers, BASE_CONFIG, OrderFor, Exchange, ExchangeSegment, OrderType, \
+    OrderValidity
 
 
 def get_request_session():
@@ -67,10 +71,40 @@ class FivePaisaClient:
         margin = json.loads(response.content)["body"]
         return margin
 
-    def place_modify_order(self):
+    def place_modify_order(self,
+                           order_for,
+                           exchange,
+                           exchange_type,
+                           price,
+                           order_id,
+                           order_type,
+                           quantity,
+                           script_code,
+                           at_market,
+                           order_validity,
+                           after_market):
         endpoint_detail = BASE_CONFIG["api"]["order_request"]
-        body = build_placer_modify_order_body(self.head, endpoint_detail["request_code"], self.client_code)
-        response = self.request_session.post(endpoint_detail["url"], data=json.dumps(body))
-        margin = json.loads(response.content)["body"]
-        return margin
 
+        # Generate UUID for tracking
+        uuid = utils.get_a_uuid()
+        body = build_placer_modify_order_body(self.head,
+                                              endpoint_detail["request_code"],
+                                              self.client_code,
+                                              app_code=self.settings.APP_SOURCE,
+                                              order_for=order_for,
+                                              exchange=exchange,
+                                              exchange_type=exchange_type,
+                                              price=price,
+                                              order_id=order_id,
+                                              order_type=order_type,
+                                              quantity=quantity,
+                                              script_code=script_code,
+                                              at_market=at_market,
+                                              remote_order_id=uuid,
+                                              order_validity=order_validity,
+                                              after_market=after_market
+                                              )
+        print(body)
+        response = self.request_session.post(endpoint_detail["url"], data=json.dumps(body))
+        placed_order = json.loads(response.content)["body"]
+        return placed_order
