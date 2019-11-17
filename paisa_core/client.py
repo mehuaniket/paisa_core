@@ -1,7 +1,7 @@
 import json
 import requests
 from .config import default_headers, BASE_CONFIG
-from .builder import build_head, build_login_body, build_get_margin_body
+from .builder import build_head, build_login_body, build_get_margin_body, build_placer_modify_order_body
 from .aes_ciper import AESCipher
 
 
@@ -31,8 +31,7 @@ class FivePaisaClient:
         """
         self.settings = settings
         self.head = build_head(self.settings)
-        print(self.settings.ENCRYPTION_KEY.value)
-        self.cryptic = AESCipher(self.settings.ENCRYPTION_KEY.value)
+        self.cryptic = AESCipher(self.settings.ENCRYPTION_KEY)
         self.request_session = get_request_session()
 
         self.auth = {
@@ -53,19 +52,25 @@ class FivePaisaClient:
 
         body = build_login_body(self.head, endpoint_detail["request_code"],
                                 username, password, pin)
+        print(body)
         response = self.request_session.post(endpoint_detail["url"], data=json.dumps(body))
 
         self.profile = json.loads(response.content)["body"]
         self.client_code = self.profile["ClientCode"]
         self.is_logged = True
-        print(self.profile)
         return self.profile
 
-    def get_margin_detail(self):
-        endpoint_detail = BASE_CONFIG["api"]["user_margin"]
+    def get_user_info(self, key):
+        endpoint_detail = BASE_CONFIG["api"][key]
         body = build_get_margin_body(self.head, endpoint_detail["request_code"], self.client_code)
-        print(body)
         response = self.request_session.post(endpoint_detail["url"], data=json.dumps(body))
-
         margin = json.loads(response.content)["body"]
         return margin
+
+    def place_modify_order(self):
+        endpoint_detail = BASE_CONFIG["api"]["order_request"]
+        body = build_placer_modify_order_body(self.head, endpoint_detail["request_code"], self.client_code)
+        response = self.request_session.post(endpoint_detail["url"], data=json.dumps(body))
+        margin = json.loads(response.content)["body"]
+        return margin
+
