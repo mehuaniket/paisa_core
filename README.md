@@ -14,4 +14,7 @@ chmod +x .env
 ```bash 
 ./.env
 ```
-- Now you can main.py. 
+- Now you can run main.py. 
+```bash
+python main.py
+```
