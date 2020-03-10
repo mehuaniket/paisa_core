@@ -1,6 +1,5 @@
 .idea/
 notes.md
-main.py
 request_instance.pkl
 # Byte-compiled / optimized / DLL files
 __pycache__/

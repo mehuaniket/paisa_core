@@ -10,7 +10,7 @@ class OrderFor(Enum, metaclass=EnumDirectValueMeta):
 
 class OrderType(Enum, metaclass=EnumDirectValueMeta):
     BUY = "BUY"
-    SELL = "MSELL"
+    SELL = "SELL"
 
 
 # Exchanges type enum

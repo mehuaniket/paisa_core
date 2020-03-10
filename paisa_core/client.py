@@ -68,10 +68,10 @@ class FivePaisaClient:
         endpoint_detail = BASE_CONFIG["api"][key]
         body = build_get_margin_body(self.head, endpoint_detail["request_code"], self.client_code)
         response = self.request_session.post(endpoint_detail["url"], data=json.dumps(body))
-        margin = json.loads(response.content)["body"]
-        return margin
+        response_body = json.loads(response.content)["body"]
+        return response_body
 
-    def place_modify_order(self,
+    def place_modify_cancel_order(self,
                            order_for,
                            exchange,
                            exchange_type,
@@ -108,3 +108,10 @@ class FivePaisaClient:
         response = self.request_session.post(endpoint_detail["url"], data=json.dumps(body))
         placed_order = json.loads(response.content)["body"]
         return placed_order
+
+    def get_trade_information(self):
+        pass
+
+    def get_trade_status(self):
+        pass
+
