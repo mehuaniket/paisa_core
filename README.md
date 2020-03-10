@@ -1,8 +1,8 @@
-# paisa_core
+# paisa_core library
 (still under development) <br/>
 Python library for 5paisa trading APIs.
 
-# To test the library.
+## USAGE:
 
 - create env file.
 
