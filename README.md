@@ -1,20 +1,34 @@
 # paisa_core library
 (still under development) <br/>
 Python library for 5paisa trading APIs.
+## Installation
 
-## USAGE:
+- Clone the repository. (Only supports python3)
 
-- create env file.
+```python
+git clone https://github.com/kodani/paisa_core.git
+cd paisa_core
+pip setup.py install
+```
+
+## Usage
+
+- Create new directory and copy `main.py`.
+- Create env file.
 
 ```bash
 mv .env.template .env
 chmod +x .env 
 ```
-- fill out all the variables from app creds you have and user authentication detail and execute the file.
+
+- Provide all the variables from app credentials you have and user authentication detail. You can execute `.env` with 
+following command.
+
 ```bash 
 ./.env
 ```
-- Now you can run main.py. 
+
+- Run main.py. 
 ```bash
 python main.py
 ```
