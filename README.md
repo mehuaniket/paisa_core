@@ -1,6 +1,7 @@
-# paisa_core library
+# Paisa Core - 5Paisa API client (Python SDK)
 (still under development) <br/>
 Python library for 5paisa trading APIs.
+
 ## Installation
 
 - Clone the repository. (Only supports python3)
